@@ -1,0 +1,269 @@
+{
+  "version": "1.0",
+  "totalPages": 23,
+  "pages": [
+    {
+      "id": "landing",
+      "name": "Landing Page",
+      "route": "/",
+      "filePath": "pages/LandingPage.tsx",
+      "authRequired": false,
+      "roles": [],
+      "apiDependencies": []
+    },
+    {
+      "id": "login",
+      "name": "Login",
+      "route": "/login",
+      "filePath": "pages/auth/LoginPage.tsx",
+      "authRequired": false,
+      "roles": [],
+      "apiDependencies": [
+        "POST /api/auth/login"
+      ]
+    },
+    {
+      "id": "register",
+      "name": "Register",
+      "route": "/register",
+      "filePath": "pages/auth/RegisterPage.tsx",
+      "authRequired": false,
+      "roles": [],
+      "apiDependencies": [
+        "POST /api/auth/register"
+      ]
+    },
+    {
+      "id": "forgot-password",
+      "name": "Forgot Password",
+      "route": "/forgot-password",
+      "filePath": "pages/auth/ForgotPasswordPage.tsx",
+      "authRequired": false,
+      "roles": [],
+      "apiDependencies": [
+        "POST /api/auth/forgot-password"
+      ]
+    },
+    {
+      "id": "reset-password",
+      "name": "Reset Password",
+      "route": "/reset-password",
+      "filePath": "pages/auth/ResetPasswordPage.tsx",
+      "authRequired": false,
+      "roles": [],
+      "apiDependencies": [
+        "POST /api/auth/reset-password"
+      ]
+    },
+    {
+      "id": "dashboard",
+      "name": "Dashboard",
+      "route": "/dashboard",
+      "filePath": "pages/DashboardPage.tsx",
+      "authRequired": true,
+      "roles": ["admin", "member", "viewer"],
+      "apiDependencies": [
+        "GET /api/organizations/current/stats",
+        "GET /api/projects"
+      ]
+    },
+    {
+      "id": "projects-list",
+      "name": "Projects List",
+      "route": "/projects",
+      "filePath": "pages/projects/ProjectsListPage.tsx",
+      "authRequired": true,
+      "roles": ["admin", "member", "viewer"],
+      "apiDependencies": [
+        "GET /api/projects"
+      ]
+    },
+    {
+      "id": "create-project",
+      "name": "Create Project",
+      "route": "/projects/new",
+      "filePath": "pages/projects/CreateProjectPage.tsx",
+      "authRequired": true,
+      "roles": ["admin", "member"],
+      "apiDependencies": [
+        "POST /api/projects"
+      ]
+    },
+    {
+      "id": "project-detail",
+      "name": "Project Detail",
+      "route": "/projects/:id",
+      "filePath": "pages/projects/ProjectDetailPage.tsx",
+      "authRequired": true,
+      "roles": ["admin", "member", "viewer"],
+      "apiDependencies": [
+        "GET /api/projects/:id",
+        "GET /api/projects/:projectId/data-sources"
+      ]
+    },
+    {
+      "id": "edit-project",
+      "name": "Edit Project",
+      "route": "/projects/:id/edit",
+      "filePath": "pages/projects/EditProjectPage.tsx",
+      "authRequired": true,
+      "roles": ["admin", "member"],
+      "apiDependencies": [
+        "GET /api/projects/:id",
+        "PATCH /api/projects/:id"
+      ]
+    },
+    {
+      "id": "project-settings",
+      "name": "Project Settings",
+      "route": "/projects/:id/settings",
+      "filePath": "pages/projects/ProjectSettingsPage.tsx",
+      "authRequired": true,
+      "roles": ["admin", "member"],
+      "apiDependencies": [
+        "GET /api/projects/:id",
+        "DELETE /api/projects/:id"
+      ]
+    },
+    {
+      "id": "upload-data",
+      "name": "Upload Data",
+      "route": "/projects/:projectId/upload",
+      "filePath": "pages/data-sources/UploadDataPage.tsx",
+      "authRequired": true,
+      "roles": ["admin", "member"],
+      "apiDependencies": [
+        "POST /api/projects/:projectId/data-sources/upload"
+      ]
+    },
+    {
+      "id": "connect-api",
+      "name": "Connect API",
+      "route": "/projects/:projectId/connect-api",
+      "filePath": "pages/data-sources/ConnectAPIPage.tsx",
+      "authRequired": true,
+      "roles": ["admin", "member"],
+      "apiDependencies": [
+        "POST /api/projects/:projectId/data-sources/api"
+      ]
+    },
+    {
+      "id": "data-source-detail",
+      "name": "Data Source Detail",
+      "route": "/projects/:projectId/data-sources/:id",
+      "filePath": "pages/data-sources/DataSourceDetailPage.tsx",
+      "authRequired": true,
+      "roles": ["admin", "member", "viewer"],
+      "apiDependencies": [
+        "GET /api/projects/:projectId/data-sources/:id"
+      ]
+    },
+    {
+      "id": "processing-jobs",
+      "name": "Processing Jobs",
+      "route": "/projects/:projectId/jobs",
+      "filePath": "pages/processing/ProcessingJobsPage.tsx",
+      "authRequired": true,
+      "roles": ["admin", "member", "viewer"],
+      "apiDependencies": [
+        "GET /api/projects/:projectId/jobs"
+      ]
+    },
+    {
+      "id": "job-detail",
+      "name": "Job Detail",
+      "route": "/projects/:projectId/jobs/:id",
+      "filePath": "pages/processing/JobDetailPage.tsx",
+      "authRequired": true,
+      "roles": ["admin", "member", "viewer"],
+      "apiDependencies": [
+        "GET /api/projects/:projectId/jobs/:id"
+      ]
+    },
+    {
+      "id": "configure-processing",
+      "name": "Configure Processing",
+      "route": "/projects/:projectId/configure",
+      "filePath": "pages/processing/ConfigureProcessingPage.tsx",
+      "authRequired": true,
+      "roles": ["admin", "member"],
+      "apiDependencies": [
+        "GET /api/projects/:projectId/schema-mappings",
+        "POST /api/projects/:projectId/schema-mappings",
+        "GET /api/projects/:projectId/deidentification-rules",
+        "POST /api/projects/:projectId/deidentification-rules"
+      ]
+    },
+    {
+      "id": "datasets",
+      "name": "Datasets",
+      "route": "/projects/:projectId/datasets",
+      "filePath": "pages/datasets/DatasetsPage.tsx",
+      "authRequired": true,
+      "roles": ["admin", "member", "viewer"],
+      "apiDependencies": [
+        "GET /api/projects/:projectId/datasets"
+      ]
+    },
+    {
+      "id": "export-dataset",
+      "name": "Export Dataset",
+      "route": "/projects/:projectId/datasets/:id/export",
+      "filePath": "pages/datasets/ExportDatasetPage.tsx",
+      "authRequired": true,
+      "roles": ["admin", "member", "viewer"],
+      "apiDependencies": [
+        "GET /api/projects/:projectId/datasets/:id/download"
+      ]
+    },
+    {
+      "id": "users",
+      "name": "Users",
+      "route": "/users",
+      "filePath": "pages/users/UsersPage.tsx",
+      "authRequired": true,
+      "roles": ["admin"],
+      "apiDependencies": [
+        "GET /api/users",
+        "PATCH /api/users/:id",
+        "DELETE /api/users/:id"
+      ]
+    },
+    {
+      "id": "invite-user",
+      "name": "Invite User",
+      "route": "/users/invite",
+      "filePath": "pages/users/InviteUserPage.tsx",
+      "authRequired": true,
+      "roles": ["admin"],
+      "apiDependencies": [
+        "POST /api/users/invite"
+      ]
+    },
+    {
+      "id": "organization-settings",
+      "name": "Organization Settings",
+      "route": "/settings/organization",
+      "filePath": "pages/settings/OrganizationSettingsPage.tsx",
+      "authRequired": true,
+      "roles": ["admin"],
+      "apiDependencies": [
+        "GET /api/organizations/current",
+        "PATCH /api/organizations/current",
+        "DELETE /api/organizations/current"
+      ]
+    },
+    {
+      "id": "profile",
+      "name": "Profile",
+      "route": "/settings/profile",
+      "filePath": "pages/settings/ProfilePage.tsx",
+      "authRequired": true,
+      "roles": ["admin", "member", "viewer"],
+      "apiDependencies": [
+        "GET /api/users/me",
+        "PATCH /api/users/:id"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "version": "1.0",
+  "decisions": [
+    {
+      "id": "ADR-001",
+      "title": "Monolithic Architecture Pattern",
+      "decision": "Single codebase with Express backend and React frontend in monorepo",
+      "rationale": "Replit enforces single container deployment; team size of 1-2 developers for MVP; simplicity over distributed systems; rapid MVP delivery with no network overhead between services",
+      "stack": {
+        "frontend": "React 18 + Vite + TailwindCSS + shadcn/ui",
+        "backend": "Express 4 + TypeScript 5",
+        "database": "PostgreSQL 14+ with Drizzle ORM",
+        "auth": "JWT with refresh tokens"
+      }
+    },
+    {
+      "id": "ADR-002",
+      "title": "Drizzle ORM",
+      "decision": "Type-safe lightweight ORM with pg driver for database access",
+      "rationale": "Type-safe query builder with excellent DX; lightweight and Replit-compatible unlike Prisma or TypeORM; supports migration management via drizzle-kit; pg driver with connection pooling (max 10, idleTimeoutMillis 30000, connectionTimeoutMillis 2000)",
+      "stack": {
+        "frontend": "React 18 + Vite + TailwindCSS + shadcn/ui",
+        "backend": "Express 4 + TypeScript 5",
+        "database": "PostgreSQL 14+ with Drizzle ORM",
+        "auth": "JWT with refresh tokens"
+      }
+    },
+    {
+      "id": "ADR-003",
+      "title": "JWT Authentication",
+      "decision": "Stateless JWT authentication with refresh token rotation",
+      "rationale": "Stateless scaling with no session store dependency; Constitution mandated JWT with 15-minute access tokens and 7-day refresh tokens; refresh tokens stored in database with token_hash, expires_at, revoked_at; rotation invalidates old token and issues new pair on refresh",
+      "stack": {
+        "frontend": "React 18 + Vite + TailwindCSS + shadcn/ui",
+        "backend": "Express 4 + TypeScript 5",
+        "database": "PostgreSQL 14+ with Drizzle ORM",
+        "auth": "JWT with refresh tokens"
+      }
+    },
+    {
+      "id": "ADR-004",
+      "title": "Query-Level Multi-Tenancy",
+      "decision": "Enforce multi-tenancy through explicit organizationId filters on all queries",
+      "rationale": "Explicit control and clear audit trail with no magic behavior; easier debugging than middleware injection; all tenant queries must include organization_id filter; helper function withOrgFilter(orgId, query) mitigates manual filtering overhead",
+      "stack": {
+        "frontend": "React 18 + Vite + TailwindCSS + shadcn/ui",
+        "backend": "Express 4 + TypeScript 5",
+        "database": "PostgreSQL 14+ with Drizzle ORM",
+        "auth": "JWT with refresh tokens"
+      }
+    },
+    {
+      "id": "ADR-005",
+      "title": "Stream-Based File Processing",
+      "decision": "Stream-based CSV/Excel/JSON parsing with strict validation and size limits",
+      "rationale": "Memory-efficient processing prevents DoS and OOM crashes; supports 50MB CSV requirement; MIME type whitelist (text/csv, xlsx, application/json) with magic number detection; streaming parsers (csv-parser, xlsx-stream, JSONStream) for large files; temporary storage in /tmp/uploads with crypto.randomBytes filenames",
+      "stack": {
+        "frontend": "React 18 + Vite + TailwindCSS + shadcn/ui",
+        "backend": "Express 4 + TypeScript 5",
+        "database": "PostgreSQL 14+ with Drizzle ORM",
+        "auth": "JWT with refresh tokens"
+      }
+    },
+    {
+      "id": "ADR-006",
+      "title": "In-Memory Job Queue",
+      "decision": "In-memory batch processing queue for MVP using express-rate-limit pattern; async job queue with status tracking",
+      "rationale": "Redis forbidden due to port conflicts on Replit; single-server in-memory rate limiting and job processing acceptable for MVP with 20 concurrent users; distributed job queue deferred to post-MVP when multi-instance scaling required",
+      "stack": {
+        "frontend": "React 18 + Vite + TailwindCSS + shadcn/ui",
+        "backend": "Express 4 + TypeScript 5",
+        "database": "PostgreSQL 14+ with Drizzle ORM",
+        "auth": "JWT with refresh tokens"
+      }
+    },
+    {
+      "id": "ADR-007",
+      "title": "Replit Deployment",
+      "decision": "Single container deployment on Replit with production binding to 0.0.0.0:5000",
+      "rationale": "Replit enforces single container with ephemeral filesystem and port 5000; explicit IPv4 binding prevents localhost IPv6/IPv4 mismatch causing ECONNREFUSED; development backend on 127.0.0.1:3001, production on 0.0.0.0:5000; Vite dev server on 0.0.0.0:5000 with proxy to http://127.0.0.1:3001; Constitution Section C mandate",
+      "stack": {
+        "frontend": "React 18 + Vite + TailwindCSS + shadcn/ui",
+        "backend": "Express 4 + TypeScript 5",
+        "database": "PostgreSQL 14+ with Drizzle ORM",
+        "auth": "JWT with refresh tokens"
+      }
+    },
+    {
+      "id": "ADR-008",
+      "title": "Cryptographic Randomness",
+      "decision": "Use crypto.randomBytes() for all security-sensitive random value generation including tokens, session IDs, filenames, and invitation codes",
+      "rationale": "Math.random() provides only ~48-bit entropy and is predictable; crypto.randomBytes provides 128-256 bit cryptographic entropy; prevents session hijacking, token forgery, and file enumeration attacks; Constitution Section C mandate; 16 bytes for session IDs and filenames, 32 bytes for CSRF and password reset tokens",
+      "stack": {
+        "frontend": "React 18 + Vite + TailwindCSS + shadcn/ui",
+        "backend": "Express 4 + TypeScript 5",
+        "database": "PostgreSQL 14+ with Drizzle ORM",
+        "auth": "JWT with refresh tokens"
+      }
+    },
+    {
+      "id": "ADR-009",
+      "title": "PII De-identification",
+      "decision": "Hybrid approach combining regex patterns for structured data and NLP Named Entity Recognition via compromise library for names and addresses",
+      "rationale": "Core product feature requiring >95% detection accuracy; regex alone misses context-dependent PII while NER alone may miss structured data like SSNs and credit cards; three replacement strategies supported: mask (NAME), token ([NAME_hex]), and synthetic (fake replacement); manual review queue for low-confidence matches; target >95% recall and >90% precision",
+      "stack": {
+        "frontend": "React 18 + Vite + TailwindCSS + shadcn/ui",
+        "backend": "Express 4 + TypeScript 5",
+        "database": "PostgreSQL 14+ with Drizzle ORM",
+        "auth": "JWT with refresh tokens"
+      }
+    }
+  ]
+}
