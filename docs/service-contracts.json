@@ -1,0 +1,578 @@
+{
+  "serviceContracts": {
+    "version": "1.0",
+    "generatedBy": "Agent 4 (API Contract v39)",
+    "generatedAt": "2026-02-03",
+    "endpoints": [
+      {
+        "path": "/api/auth/register",
+        "method": "POST",
+        "service": "AuthService.register",
+        "authenticated": false,
+        "rateLimited": true,
+        "parameters": [
+          { "name": "email", "type": "string", "required": true },
+          { "name": "password", "type": "string", "required": true },
+          { "name": "name", "type": "string", "required": true },
+          { "name": "organizationName", "type": "string", "required": true }
+        ],
+        "returns": "RegisterResponse"
+      },
+      {
+        "path": "/api/auth/login",
+        "method": "POST",
+        "service": "AuthService.login",
+        "authenticated": false,
+        "rateLimited": true,
+        "parameters": [
+          { "name": "email", "type": "string", "required": true },
+          { "name": "password", "type": "string", "required": true }
+        ],
+        "returns": "LoginResponse"
+      },
+      {
+        "path": "/api/auth/refresh",
+        "method": "POST",
+        "service": "AuthService.refreshAccessToken",
+        "authenticated": false,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "refreshToken", "type": "string", "required": true }
+        ],
+        "returns": "RefreshResponse"
+      },
+      {
+        "path": "/api/auth/logout",
+        "method": "POST",
+        "service": "AuthService.logout",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "refreshToken", "type": "string", "required": true }
+        ],
+        "returns": "void"
+      },
+      {
+        "path": "/api/auth/forgot-password",
+        "method": "POST",
+        "service": "AuthService.forgotPassword",
+        "authenticated": false,
+        "rateLimited": true,
+        "parameters": [
+          { "name": "email", "type": "string", "required": true }
+        ],
+        "returns": "MessageResponse"
+      },
+      {
+        "path": "/api/auth/reset-password",
+        "method": "POST",
+        "service": "AuthService.resetPassword",
+        "authenticated": false,
+        "rateLimited": true,
+        "parameters": [
+          { "name": "token", "type": "string", "required": true },
+          { "name": "password", "type": "string", "required": true }
+        ],
+        "returns": "MessageResponse"
+      },
+      {
+        "path": "/api/organizations/current",
+        "method": "GET",
+        "service": "OrganizationService.getCurrentOrganization",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" }
+        ],
+        "returns": "OrganizationResponse"
+      },
+      {
+        "path": "/api/organizations/current",
+        "method": "PATCH",
+        "service": "OrganizationService.updateOrganization",
+        "authenticated": true,
+        "rbac": ["admin"],
+        "rateLimited": false,
+        "parameters": [
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" },
+          { "name": "name", "type": "string", "required": false }
+        ],
+        "returns": "OrganizationResponse"
+      },
+      {
+        "path": "/api/organizations/current",
+        "method": "DELETE",
+        "service": "OrganizationService.deleteOrganization",
+        "authenticated": true,
+        "rbac": ["admin"],
+        "rateLimited": false,
+        "parameters": [
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" }
+        ],
+        "returns": "void"
+      },
+      {
+        "path": "/api/organizations/current/stats",
+        "method": "GET",
+        "service": "OrganizationService.getOrganizationStats",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" }
+        ],
+        "returns": "StatsResponse"
+      },
+      {
+        "path": "/api/users/me",
+        "method": "GET",
+        "service": "UserService.getCurrentUser",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "userId", "type": "number", "required": true, "source": "jwt" }
+        ],
+        "returns": "UserResponse"
+      },
+      {
+        "path": "/api/users",
+        "method": "GET",
+        "service": "UserService.listUsers",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" },
+          { "name": "page", "type": "number", "required": false },
+          { "name": "limit", "type": "number", "required": false },
+          { "name": "role", "type": "string", "required": false }
+        ],
+        "returns": "ListUsersResponse"
+      },
+      {
+        "path": "/api/users/:id",
+        "method": "PATCH",
+        "service": "UserService.updateUser",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "id", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" },
+          { "name": "name", "type": "string", "required": false },
+          { "name": "role", "type": "string", "required": false }
+        ],
+        "returns": "UserResponse"
+      },
+      {
+        "path": "/api/users/:id",
+        "method": "DELETE",
+        "service": "UserService.deleteUser",
+        "authenticated": true,
+        "rbac": ["admin"],
+        "rateLimited": false,
+        "parameters": [
+          { "name": "id", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" }
+        ],
+        "returns": "void"
+      },
+      {
+        "path": "/api/users/invite",
+        "method": "POST",
+        "service": "UserService.inviteUser",
+        "authenticated": true,
+        "rbac": ["admin"],
+        "rateLimited": true,
+        "parameters": [
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" },
+          { "name": "email", "type": "string", "required": true },
+          { "name": "role", "type": "string", "required": false }
+        ],
+        "returns": "MessageResponse",
+        "note": "Deferred to Phase 2 (AR-001)"
+      },
+      {
+        "path": "/api/projects",
+        "method": "GET",
+        "service": "ProjectService.listProjects",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" },
+          { "name": "page", "type": "number", "required": false },
+          { "name": "limit", "type": "number", "required": false }
+        ],
+        "returns": "ListProjectsResponse"
+      },
+      {
+        "path": "/api/projects",
+        "method": "POST",
+        "service": "ProjectService.createProject",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" },
+          { "name": "userId", "type": "number", "required": true, "source": "jwt" },
+          { "name": "name", "type": "string", "required": true },
+          { "name": "description", "type": "string", "required": false },
+          { "name": "targetSchema", "type": "string", "required": true }
+        ],
+        "returns": "ProjectResponse"
+      },
+      {
+        "path": "/api/projects/:id",
+        "method": "GET",
+        "service": "ProjectService.getProject",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "id", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" }
+        ],
+        "returns": "ProjectDetailResponse"
+      },
+      {
+        "path": "/api/projects/:id",
+        "method": "PATCH",
+        "service": "ProjectService.updateProject",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "id", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" },
+          { "name": "name", "type": "string", "required": false },
+          { "name": "description", "type": "string", "required": false },
+          { "name": "targetSchema", "type": "string", "required": false }
+        ],
+        "returns": "ProjectResponse"
+      },
+      {
+        "path": "/api/projects/:id",
+        "method": "DELETE",
+        "service": "ProjectService.deleteProject",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "id", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" }
+        ],
+        "returns": "void"
+      },
+      {
+        "path": "/api/projects/:projectId/data-sources",
+        "method": "GET",
+        "service": "DataSourceService.listDataSources",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "projectId", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" },
+          { "name": "page", "type": "number", "required": false },
+          { "name": "limit", "type": "number", "required": false },
+          { "name": "type", "type": "string", "required": false }
+        ],
+        "returns": "ListDataSourcesResponse"
+      },
+      {
+        "path": "/api/projects/:projectId/data-sources/:id",
+        "method": "GET",
+        "service": "DataSourceService.getDataSource",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "id", "type": "number", "required": true, "source": "path" },
+          { "name": "projectId", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" }
+        ],
+        "returns": "DataSourceDetailResponse"
+      },
+      {
+        "path": "/api/projects/:projectId/data-sources/upload",
+        "method": "POST",
+        "service": "DataSourceService.uploadFile",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "projectId", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" },
+          { "name": "name", "type": "string", "required": true },
+          { "name": "file", "type": "File", "required": true }
+        ],
+        "returns": "DataSourceResponse"
+      },
+      {
+        "path": "/api/projects/:projectId/data-sources/api",
+        "method": "POST",
+        "service": "DataSourceService.createApiSource",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "projectId", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" },
+          { "name": "name", "type": "string", "required": true },
+          { "name": "apiProvider", "type": "string", "required": true },
+          { "name": "connectionConfig", "type": "object", "required": true }
+        ],
+        "returns": "DataSourceResponse"
+      },
+      {
+        "path": "/api/projects/:projectId/data-sources/:id",
+        "method": "PATCH",
+        "service": "DataSourceService.updateDataSource",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "id", "type": "number", "required": true, "source": "path" },
+          { "name": "projectId", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" },
+          { "name": "name", "type": "string", "required": false },
+          { "name": "connectionConfig", "type": "object", "required": false }
+        ],
+        "returns": "DataSourceResponse"
+      },
+      {
+        "path": "/api/projects/:projectId/data-sources/:id",
+        "method": "DELETE",
+        "service": "DataSourceService.deleteDataSource",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "id", "type": "number", "required": true, "source": "path" },
+          { "name": "projectId", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" }
+        ],
+        "returns": "void"
+      },
+      {
+        "path": "/api/projects/:projectId/jobs",
+        "method": "GET",
+        "service": "ProcessingJobService.listProcessingJobs",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "projectId", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" },
+          { "name": "page", "type": "number", "required": false },
+          { "name": "limit", "type": "number", "required": false },
+          { "name": "status", "type": "string", "required": false },
+          { "name": "dataSourceId", "type": "number", "required": false }
+        ],
+        "returns": "ListJobsResponse"
+      },
+      {
+        "path": "/api/projects/:projectId/jobs",
+        "method": "POST",
+        "service": "ProcessingJobService.createProcessingJob",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "projectId", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" },
+          { "name": "dataSourceId", "type": "number", "required": true },
+          { "name": "config", "type": "object", "required": false }
+        ],
+        "returns": "ProcessingJobResponse"
+      },
+      {
+        "path": "/api/projects/:projectId/jobs/:id",
+        "method": "GET",
+        "service": "ProcessingJobService.getProcessingJob",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "id", "type": "number", "required": true, "source": "path" },
+          { "name": "projectId", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" }
+        ],
+        "returns": "ProcessingJobDetailResponse"
+      },
+      {
+        "path": "/api/projects/:projectId/jobs/:id/cancel",
+        "method": "PATCH",
+        "service": "ProcessingJobService.cancelProcessingJob",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "id", "type": "number", "required": true, "source": "path" },
+          { "name": "projectId", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" }
+        ],
+        "returns": "ProcessingJobResponse"
+      },
+      {
+        "path": "/api/projects/:projectId/schema-mappings",
+        "method": "GET",
+        "service": "SchemaMappingService.getSchemaMapping",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "projectId", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" }
+        ],
+        "returns": "SchemaMappingResponse"
+      },
+      {
+        "path": "/api/projects/:projectId/schema-mappings",
+        "method": "POST",
+        "service": "SchemaMappingService.createSchemaMapping",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "projectId", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" },
+          { "name": "sourceSchema", "type": "object", "required": true },
+          { "name": "targetSchema", "type": "string", "required": true },
+          { "name": "fieldMappings", "type": "array", "required": true },
+          { "name": "transformationRules", "type": "object", "required": false }
+        ],
+        "returns": "SchemaMappingResponse"
+      },
+      {
+        "path": "/api/projects/:projectId/schema-mappings",
+        "method": "PATCH",
+        "service": "SchemaMappingService.updateSchemaMapping",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "projectId", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" },
+          { "name": "sourceSchema", "type": "object", "required": false },
+          { "name": "targetSchema", "type": "string", "required": false },
+          { "name": "fieldMappings", "type": "array", "required": false },
+          { "name": "transformationRules", "type": "object", "required": false }
+        ],
+        "returns": "SchemaMappingResponse"
+      },
+      {
+        "path": "/api/projects/:projectId/schema-mappings",
+        "method": "DELETE",
+        "service": "SchemaMappingService.deleteSchemaMapping",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "projectId", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" }
+        ],
+        "returns": "void"
+      },
+      {
+        "path": "/api/projects/:projectId/deidentification-rules",
+        "method": "GET",
+        "service": "DeidentificationService.getDeidentificationRules",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "projectId", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" }
+        ],
+        "returns": "DeidentificationRulesResponse"
+      },
+      {
+        "path": "/api/projects/:projectId/deidentification-rules",
+        "method": "POST",
+        "service": "DeidentificationService.createDeidentificationRule",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "projectId", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" },
+          { "name": "ruleType", "type": "string", "required": true },
+          { "name": "pattern", "type": "string", "required": true },
+          { "name": "entityType", "type": "string", "required": true },
+          { "name": "maskingStrategy", "type": "string", "required": true },
+          { "name": "replacementValue", "type": "string", "required": false }
+        ],
+        "returns": "DeidentificationRuleResponse"
+      },
+      {
+        "path": "/api/projects/:projectId/deidentification-rules",
+        "method": "PATCH",
+        "service": "DeidentificationService.updateDeidentificationRule",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "projectId", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" },
+          { "name": "ruleType", "type": "string", "required": false },
+          { "name": "pattern", "type": "string", "required": false },
+          { "name": "entityType", "type": "string", "required": false },
+          { "name": "maskingStrategy", "type": "string", "required": false },
+          { "name": "replacementValue", "type": "string", "required": false }
+        ],
+        "returns": "DeidentificationRuleResponse"
+      },
+      {
+        "path": "/api/projects/:projectId/deidentification-rules",
+        "method": "DELETE",
+        "service": "DeidentificationService.deleteDeidentificationRule",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "projectId", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" }
+        ],
+        "returns": "void"
+      },
+      {
+        "path": "/api/projects/:projectId/datasets",
+        "method": "GET",
+        "service": "DatasetService.listDatasets",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "projectId", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" },
+          { "name": "page", "type": "number", "required": false },
+          { "name": "limit", "type": "number", "required": false }
+        ],
+        "returns": "ListDatasetsResponse"
+      },
+      {
+        "path": "/api/projects/:projectId/datasets/:id",
+        "method": "GET",
+        "service": "DatasetService.getDataset",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "id", "type": "number", "required": true, "source": "path" },
+          { "name": "projectId", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" }
+        ],
+        "returns": "DatasetDetailResponse"
+      },
+      {
+        "path": "/api/projects/:projectId/datasets/:id",
+        "method": "DELETE",
+        "service": "DatasetService.deleteDataset",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "id", "type": "number", "required": true, "source": "path" },
+          { "name": "projectId", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" }
+        ],
+        "returns": "void"
+      },
+      {
+        "path": "/api/projects/:projectId/datasets/:id/download",
+        "method": "GET",
+        "service": "DatasetService.downloadDataset",
+        "authenticated": true,
+        "rateLimited": false,
+        "parameters": [
+          { "name": "id", "type": "number", "required": true, "source": "path" },
+          { "name": "projectId", "type": "number", "required": true, "source": "path" },
+          { "name": "organizationId", "type": "number", "required": true, "source": "jwt" }
+        ],
+        "returns": "FileStream"
+      },
+      {
+        "path": "/health",
+        "method": "GET",
+        "service": "HealthService.healthCheck",
+        "authenticated": false,
+        "rateLimited": false,
+        "parameters": [],
+        "returns": "HealthResponse"
+      }
+    ]
+  }
+}
